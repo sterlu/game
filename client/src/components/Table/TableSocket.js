@@ -7,6 +7,8 @@ import SocketContext from '../../Socket-context';
 import './TableSocket.css';
 import Player from '../Player';
 import { FIELDS, FIELDS_CHUNKED } from '../gameConfig';
+import rollADie from 'roll-a-die';
+
 
 // implement state
 
@@ -29,7 +31,14 @@ class Table extends Component {
             ...this.state.gameState,
             rolling: true,
           }
-        })
+        });
+
+        // dice animation, kapiram da treba u setTimeout
+        const element = document.getElementById('dice');
+        const response = (val) => {console.log(val);}
+        rollADie({element, numberOfDice: 1 , values: [ this.state.rolls[this.state.rolls.length - 1].rolled ],
+             noSound: true, delay : 5000, callback: response});
+        
     };
 
     componentDidMount(){
@@ -71,7 +80,7 @@ class Table extends Component {
         return (
             <div className="table">
                 <div>
-                    <Button onClick={this.onClick} disabled={!isPlayersTurn || gameState.rolling}>Roll the dice</Button>
+                    <Button onClick={this.onClick}>Roll the dice</Button>
                     <div className="stats">
                       {
                           gameState.turnOfPlayer >= 0 && (
@@ -83,6 +92,9 @@ class Table extends Component {
                             <div>Last roll by {rolls[rolls.length - 1].player.name}: {rolls[rolls.length - 1].rolled}</div>
                           )
                       }
+                    </div>
+                    <div id='dice'>
+
                     </div>
                 </div>
                 <div className="fields">
