@@ -2,12 +2,16 @@ class Player {
   /**
    * @param {string} id
    * @param {string} name
+   * @param {Object} socket
    * @param {Field.index} fieldIndex
    */
-  constructor(id, name, fieldIndex) {
+  constructor(id, name, socket, fieldIndex) {
     this.id = id;
     this.name = name;
+    this.socket = socket;
     this.fieldIndex = fieldIndex;
+    this.sleep = 0;
+    this.finished = false;
   }
 }
 
@@ -26,6 +30,12 @@ class Field {
   }
 }
 
+const GameState = {
+  PREGAME: 0,
+  ONGOING: 1,
+  FINISHED: 2,
+};
+
 class Game {
   /**
    * @param {string} name
@@ -38,17 +48,42 @@ class Game {
     this.players = [];
     /** @type {number} */
     this.turnOfPlayer = 0;
+    this.state = GameState.PREGAME;
   }
 
   /**
+   * @param {string} id
    * @param {string} name
-   * @returns {number} id
+   * @param {Object} socket
+   * @returns {number}
    */
-  addPlayer(name) {
-    const player = new Player(name, name, 0);
+  addPlayer(id, name, socket) {
+    const player = new Player(id, name, socket, 0);
     this.players.push(player);
     this.fields[0].players.push(player.id);
+    log(`Added player ${name}`);
+    this.sendState();
     return this.players.length - 1;
+  }
+
+  /**
+   * @param {string} id
+   */
+  removePlayer(id) {
+    const index = this.players.findIndex(p => p.id === id);
+    if (index < 0) return;
+    if (this.state === GameState.ONGOING && index > this.turnOfPlayer) this.turnOfPlayer -= 1;
+    // TODO Bug: remove from all Fields
+    log(`Removed player ${this.players[index].name}`);
+    this.players.splice(index, 1);
+    this.sendState();
+  }
+
+  start() {
+    if (this.players.length >= 2) {
+      this.state = GameState.ONGOING;
+      log('Game started');
+    }
   }
 
   /**
@@ -69,7 +104,8 @@ class Game {
     toField.players.push(playerId);
     player.fieldIndex = to;
     player.sleep = toField.sleep;
-    this.printState();
+    if (to === this.fields.length - 1) player.finished = true;
+    this.sendState();
     if (toField.players.length > 1 && to !== 0) {
       log(`Player ${this.players.find(p => p.id === toField.players[0]).name} already on ${to}`);
       stateChanges.push(...this.movePlayer(toField.players[0], to, to - 3));
@@ -89,25 +125,48 @@ class Game {
     } else {
       const rolled = Math.ceil(Math.random() * 6);
       log(`New turn: ${player.name} rolled ${rolled}`);
+      this.sendRoll(player, rolled);
       this.movePlayer(player.id, player.fieldIndex, player.fieldIndex + rolled);
     }
-    this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
+    this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length; // TODO skip players that have finished
     log('---\n');
-    return this.fields[this.fields.length - 1].players.length;
+    return this.players.filter(p => p.finished).length;
   }
 
   printState() {
     this.players.forEach(p => log(`${p.name}: \t${p.fieldIndex}`));
   }
 
-  sendStateToAll() {}
+  sendState() {
+    this.printState();
+    const state = {
+      state: this.state,
+      turnOfPlayer: this.turnOfPlayer,
+      players: this.players.map(p => ({ name: p.name, id: p.id, sleep: p.sleep, fieldIndex: p.fieldIndex })),
+    };
+    this.players.forEach((p) => {
+      if (p.socket) p.socket.emit('state', state);
+    });
+  }
+
+  sendRoll(player, rolled) {
+    const message = {
+      player: { id: player.id, name: player.name },
+      rolled,
+    };
+    this.players.forEach((p) => {
+      if (p.socket) p.socket.emit('rolled', message);
+    });
+  }
 }
 
 const DEBUG = true;
 const log = t => DEBUG && console.log(t);
 
-// test
-async function test() {
+/**
+ * @returns {Game}
+ */
+function createGame() {
   const fields = [
     new Field(0, 0),
     new Field(1, 0),
@@ -161,14 +220,20 @@ async function test() {
     new Field(49, 0, 47),
     new Field(50, 0),
   ];
-  const game = new Game('Test igra', fields);
-  game.addPlayer('Braca');
-  game.addPlayer('Šomi');
-  game.addPlayer('Duje');
+  return new Game('Test igra', fields);
+}
+
+module.exports = createGame;
+
+async function test() {
+  const game = createGame();
+  game.addPlayer('1', 'Braca', {});
+  game.addPlayer('2', 'Šomi', {});
+  game.addPlayer('3', 'Duje', {});
 
   while (!game.turn()) {
     await new Promise(r => setTimeout(r, 1000));
   }
 }
 
-test();
+// test();

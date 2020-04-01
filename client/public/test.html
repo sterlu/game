@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <title>Socket.IO test</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font: 13px Helvetica, Arial;
+    }
+  </style>
+</head>
+<body>
+<div>
+  <h1>State</h1>
+  <pre><code id="state"></code></pre>
+  <button onclick="window.socket.emit('game turn')">Turn</button>
+  <h2>Rolls:</h2>
+  <ul id="rolls"></ul>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  $(function () {
+    var socket = io();
+    window.socket = socket;
+    socket.emit('register', prompt('name'));
+    socket.emit('game start');
+    socket.on('state', function (msg) {
+      $('#state').text(JSON.stringify(msg, null, 2));
+    });
+    socket.on('rolled', function (msg) {
+      $('#rolls').append($('<li>').text(msg.player.name + ' rolled ' + msg.rolled));
+    });
+  });
+</script>
+</body>
+</html>
