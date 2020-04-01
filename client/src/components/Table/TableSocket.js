@@ -103,7 +103,7 @@ class Table extends Component {
               </ul>
 
               <div>
-                <Button onClick={this.onClick}>Roll 🎲</Button>
+                <Button onClick={this.onClick} disabled={!isPlayersTurn || gameState.rolling}>Roll 🎲</Button>
                 <div id='dice' />
               </div>
 
