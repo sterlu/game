@@ -2,6 +2,7 @@ const COLORS = ['#e74c3c', '#3498db', '#f1c40f', '#27ae60', '#e67e22', '#8e44ad'
 const DEBUG = true;
 
 const log = t => DEBUG && console.log(t);
+const sleep = async t => await new Promise(r => setTimeout(r, t));
 
 class Player {
   /**
@@ -57,6 +58,7 @@ class Game {
     this.turnOfPlayer = 0;
     this.state = GameState.PREGAME;
     this.nextColorIndex = 0;
+    this.rolling = false;
   }
 
   /**
@@ -103,7 +105,7 @@ class Game {
    * @param {Field.index} from
    * @param {Field.index} to
    */
-  movePlayer(playerId, from, to) {
+  async movePlayer(playerId, from, to) {
     const player = this.players.find(p => p.id === playerId);
     if (to > this.fields.length - 1) return [];
     if (from === to) return [];
@@ -120,27 +122,32 @@ class Game {
     this.sendState();
     if (toField.players.length > 1 && to !== 0) {
       log(`Player ${this.players.find(p => p.id === toField.players[0]).name} already on ${to}`);
-      stateChanges.push(...this.movePlayer(toField.players[0], to, to - 3));
+      stateChanges.push(...(await this.movePlayer(toField.players[0], to, to - 3)));
     }
     if (toField.goesTo && toField.goesTo !== from) {
       log(`Special field ${to} goes to ${toField.goesTo}`);
-      stateChanges.push(...this.movePlayer(playerId, to, toField.goesTo));
+      await sleep(500);
+      console.log(stateChanges);
+      stateChanges.push(...(await this.movePlayer(playerId, to, toField.goesTo)));
     }
     return stateChanges;
   }
 
-  turn() {
+  async turn() {
     const player = this.players[this.turnOfPlayer];
+    this.rolling = true;
     if (player.sleep) {
       player.sleep -= 1;
       log(`New turn: ${player.name} sleeping (${player.sleep} more turns)`);
+      this.sendRoll(player, 0);
     } else {
       const rolled = Math.ceil(Math.random() * 6);
       log(`New turn: ${player.name} rolled ${rolled}`);
       this.sendRoll(player, rolled);
-      this.movePlayer(player.id, player.fieldIndex, player.fieldIndex + rolled);
+      await this.movePlayer(player.id, player.fieldIndex, player.fieldIndex + rolled);
     }
     this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length; // TODO skip players that have finished
+    this.rolling = false;
     this.sendState();
     log('---\n');
     return this.players.filter(p => p.finished).length;
@@ -155,6 +162,7 @@ class Game {
     const state = {
       state: this.state,
       turnOfPlayer: this.turnOfPlayer,
+      rolling: this.rolling,
       players: this.players.map(p => ({
         name: p.name,
         id: p.id,

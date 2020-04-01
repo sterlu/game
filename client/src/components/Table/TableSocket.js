@@ -5,6 +5,7 @@ import history from '../../History';
 import { Button } from 'react-bootstrap';
 import SocketContext from '../../Socket-context';
 import './TableSocket.css';
+import Player from '../Player';
 
 // implement state
 
@@ -22,6 +23,12 @@ class Table extends Component {
 
     onClick = () => {
         this.props.socket.emit('game turn');
+        this.setState({
+          gameState: {
+            ...this.gameState,
+            rolling: true,
+          }
+        })
     };
 
     componentDidMount(){
@@ -49,12 +56,21 @@ class Table extends Component {
         const { socket } = this.props;
         let isPlayersTurn = false;
         if (gameState.players && gameState.players[gameState.turnOfPlayer].id === socket.id) isPlayersTurn = true;
+        if (gameState.players) {
+          gameState.players.forEach((p, i) => {
+            const field = document.getElementById(`field-${p.fieldIndex}`);
+            p.position = {
+                top: field.offsetTop,
+                left: field.offsetLeft,
+            }
+          })
+        }
 
         if (!socket.name) return (<Redirect to="/" />);
         return (
             <div className="table">
                 <div>
-                    <Button onClick={this.onClick} disabled={!isPlayersTurn}>Roll the dice</Button>
+                    <Button onClick={this.onClick} disabled={!isPlayersTurn || gameState.rolling}>Roll the dice</Button>
                     {
                         rolls.length > 0 && (
                           <p>Last roll by {rolls[rolls.length - 1].player.name}: {rolls[rolls.length - 1].rolled}</p>
@@ -65,9 +81,12 @@ class Table extends Component {
                     {
                         // TODO change number of fields
                         Array.from(Array(51)).map((_,i) => (
-                            <Field key = {i} id = {i} players={playerLocations[i]}>
-                            </Field>
+                            <Field key={i} id={i} players={playerLocations[i]} />
                         ))
+                    }
+                    {
+                        gameState.players &&
+                        gameState.players.map((p) => (<Player key={p.id} player={p} />))
                     }
                 </div>
             </div>

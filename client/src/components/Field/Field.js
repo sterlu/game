@@ -1,19 +1,22 @@
 import React from 'react';
 import "./Field.css";
+import Player from '../Player';
 
 const Field = ({id, players = []}) => {
     return (
-        <div className='field'>
+        <div className='field' id={`field-${id}`}>
             <i>{id}</i>
-            <div className="players">
-                {
-                    players.map(p => (
-                      <div className="player" key={p.id} style={{ backgroundColor: p.color }}>
-                          {p.name.substr(0, 1)}
-                      </div>
-                    ))
-                }
-            </div>
+          {
+            (id === 0 || id === 51) && (
+              <div className="players">
+                  {
+                      players.map(p => (
+                        <Player key={p.id} player={p} inField />
+                      ))
+                  }
+              </div>
+            )
+          }
         </div>
     )
 };
