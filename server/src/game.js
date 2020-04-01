@@ -185,6 +185,10 @@ class Game {
       if (p.socket) p.socket.emit('rolled', message);
     });
   }
+
+  _logFields() {
+    console.log(this.fields)
+  }
 }
 
 /**

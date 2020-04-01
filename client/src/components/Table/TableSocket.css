@@ -1,5 +1,7 @@
 .table {
     position: relative;
+    max-width: 1080px;
+    margin: auto;
 }
 
 .fields {

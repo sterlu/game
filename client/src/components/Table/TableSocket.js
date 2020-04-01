@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap';
 import SocketContext from '../../Socket-context';
 import './TableSocket.css';
 import Player from '../Player';
+import { FIELDS } from '../gameConfig';
 
 // implement state
 
@@ -53,7 +54,7 @@ class Table extends Component {
     }
     render(){
         const { socket } = this.props;
-        if (!socket.name) return (<Redirect to="/" />);
+        // if (!socket.name) return (<Redirect to="/" />);
         const { gameState, playerLocations, rolls } = this.state;
         let isPlayersTurn = false;
         if (gameState.players && gameState.players.length && gameState.players[gameState.turnOfPlayer].id === socket.id) isPlayersTurn = true;
@@ -87,8 +88,8 @@ class Table extends Component {
                 <div className="fields">
                     {
                         // TODO change number of fields
-                        Array.from(Array(51)).map((_,i) => (
-                            <Field key={i} id={i} players={playerLocations[i]} />
+                        FIELDS.map((f) => (
+                            <Field key={f.index} field={f} players={playerLocations[f.index]} />
                         ))
                     }
                     {

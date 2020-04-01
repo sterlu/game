@@ -1,0 +1,48 @@
+.arrow {
+    position: absolute;
+    z-index: -1;
+}
+.arrow .wide {
+    position: absolute;
+    height: 2px;
+}
+.arrow .start {
+    position: absolute;
+    width: 2px;
+    height: 30px;
+}
+.arrow .end {
+    position: absolute;
+    width: 4px;
+    height: 30px;
+}
+
+.arrow.positive {
+    bottom: 5px;
+    left: 75px;
+}
+.arrow.positive * {
+    background-color: #1e7e34;
+}
+.arrow.positive .wide {
+    top: 10px;
+}
+
+.arrow.negative {
+    top: -5px;
+    left: 25px;
+}
+.arrow.negative * {
+    background-color: #FF0000;
+}
+.arrow.negative .wide {
+    /*top: 10px;*/
+}
+.arrow.negative .end::after {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 3px;
+    width: 3px;
+    background-color: red;
+}
