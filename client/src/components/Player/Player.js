@@ -6,8 +6,8 @@ const Player = ({ player: { id, name, color, position, fieldIndex }, inField = f
       <div className="player" style={{
         backgroundColor: color,
         position: inField ? 'static' : 'absolute',
-        left: position.left + 30,
-        top: position.top + 30,
+        left: position.left + 35,
+        top: position.top + 35,
         visibility: (!inField && (fieldIndex === 0 || fieldIndex === 51)) ? 'hidden' : 'visible'
       }}>
         {name.substr(0, 1)}

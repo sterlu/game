@@ -18,19 +18,26 @@ class Table extends Component {
         super();
 
         this.state = {
-            gameState: {},
+            gameState: {
+                players: [],
+            },
             playerLocations: {},
             rolls: [],
         }
     }
 
     diceRoll = () => {
-        const element = document.getElementById('dice');
-        const response = (val) => {console.log(val);}
-        rollADie({element, numberOfDice: 1 , values: [ this.state.rolls[this.state.rolls.length - 1].rolled ],
-             noSound: true, delay : 5000, callback: response});
-
-    }
+      const element = document.getElementById('dice');
+      const val = this.state.rolls[this.state.rolls.length - 1].rolled;
+      if (val) rollADie({
+        element,
+        numberOfDice: 1,
+        values: [val],
+        noSound: true,
+        delay: 5000,
+        callback: () => {}
+      });
+    };
 
     onClick = () => {
         this.props.socket.emit('game turn');
@@ -47,7 +54,7 @@ class Table extends Component {
         this.props.socket.emit('game start');
 
         this.props.socket.on('state', (gameState) => {
-            console.log(gameState);
+            // console.log(gameState);
             const playerLocations = {};
             gameState.players.forEach(p => {
                 playerLocations[p.fieldIndex]
@@ -60,12 +67,12 @@ class Table extends Component {
             // console.log(msg.player.name, msg.rolled);
             this.setState({
                 rolls: [...this.state.rolls, msg],
-            });
+            }, this.diceRoll);
         });
     }
     render(){
         const { socket } = this.props;
-        // if (!socket.name) return (<Redirect to="/" />);
+        if (!socket.name) return (<Redirect to="/" />);
         const { gameState, playerLocations, rolls } = this.state;
         let isPlayersTurn = false;
         if (gameState.players && gameState.players.length && gameState.players[gameState.turnOfPlayer].id === socket.id) isPlayersTurn = true;
@@ -78,33 +85,41 @@ class Table extends Component {
             }
           })
         }
-        if(Array.isArray(rolls) && rolls.length) {
-            this.diceRoll();
-        }
 
         return (
-            <div className="table">
-                <div>
-                    <Button onClick={this.onClick}>Roll the dice</Button>
-                    <div className="stats">
-                      {
-                          gameState.turnOfPlayer >= 0 && (
-                            <div>Now playing: {gameState.players[gameState.turnOfPlayer].name}  </div>
-                          )
-                      }
-                      {
-                          rolls.length > 0 && (
-                            <div>Last roll by {rolls[rolls.length - 1].player.name}: {rolls[rolls.length - 1].rolled}</div>
-                          )
-                      }
-                    </div>
-                    <div id='dice'>
+          <div className="wrapper">
+            <div className="sidebar">
+              <h4>Players</h4>
+              <ul className="players">
+                {
+                  gameState.players.map((p, i) => (
+                    <li key={p.id}>
+                      {p.name} {i === gameState.turnOfPlayer && (<b>🎲</b>)}
+                      {p.sleep === 1 && `🍌`}
+                      {p.sleep === 2 && `🍌🍌`}
+                    </li>
+                  ))
+                }
+              </ul>
 
-                    </div>
-                </div>
+              <div>
+                <Button onClick={this.onClick}>Roll 🎲</Button>
+                <div id='dice' />
+              </div>
+
+              <h4>Rolls</h4>
+              <ul className="rolls">
+                {
+                  [...rolls].reverse().map((r, i) => (
+                    <li>{r.player.name}: {r.rolled}</li>
+                  ))
+                }
+              </ul>
+            </div>
+            <div className="table">
                 <div className="fields">
                     {
-                        FIELDS_CHUNKED.map((f) => (
+                        FIELDS.map((f) => (
                             <Field key={f.index} field={f} players={playerLocations[f.index]} />
                         ))
                     }
@@ -114,6 +129,7 @@ class Table extends Component {
                     }
                 </div>
             </div>
+          </div>
         );
     }
 }

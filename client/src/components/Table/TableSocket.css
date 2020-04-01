@@ -1,7 +1,24 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar {
+    width: 200px;
+    border-right: 1px solid;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.rolls {
+    overflow: auto;
+}
+
 .table {
     position: relative;
     max-width: 1080px;
-    margin: auto;
+    margin: 0 auto;
 }
 
 .fields {
@@ -13,4 +30,5 @@
 
 #dice {
     margin: 100px;
+    height: 38px;
 }
