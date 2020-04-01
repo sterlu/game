@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import SocketContext from '../../Socket-context';
 import './TableSocket.css';
 import Player from '../Player';
-import { FIELDS } from '../gameConfig';
+import { FIELDS, FIELDS_CHUNKED } from '../gameConfig';
 
 // implement state
 
@@ -87,8 +87,7 @@ class Table extends Component {
                 </div>
                 <div className="fields">
                     {
-                        // TODO change number of fields
-                        FIELDS.map((f) => (
+                        FIELDS_CHUNKED.map((f) => (
                             <Field key={f.index} field={f} players={playerLocations[f.index]} />
                         ))
                     }

@@ -49,4 +49,13 @@ export const FIELDS = [
   { index: 47, goesTo: 0, sleep: 0, },
   { index: 48, goesTo: 45, sleep: 0, },
   { index: 49, goesTo: 47, sleep: 0, },
+  { index: 50, goesTo: 0, sleep: 0, },
 ];
+
+export const FIELDS_CHUNKED = [];
+let i, chunk = 9;
+for (i = 0; i < FIELDS.length; i += chunk) {
+  let tmp = FIELDS.slice(i, i + chunk);
+  if (i / chunk % 2) tmp = tmp.reverse();
+  FIELDS_CHUNKED.push(...tmp);
+}
