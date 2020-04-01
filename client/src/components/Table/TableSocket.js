@@ -43,7 +43,7 @@ class Table extends Component {
         this.setState({
           gameState: {
             ...this.state.gameState,
-            // rolling: true,
+            rolling: true,
           }
         });
     };

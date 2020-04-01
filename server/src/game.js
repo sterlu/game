@@ -150,11 +150,9 @@ class Game {
     }
     const numOfPlayersFinished = this.players.filter(p => p.finished).length;
     if (numOfPlayersFinished !== this.players.length) {
-      if (rolled !== 6) {
+      this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
+      while (this.players[this.turnOfPlayer].finished) {
         this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
-        while (this.players[this.turnOfPlayer].finished) {
-          this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
-        }
       }
     } else {
       this.state = GameState.FINISHED;
