@@ -8,5 +8,7 @@
     background-color: #333;
     font-weight: bold;
     margin: 2px;
-    transition: all .3s;
+    z-index: 1;
+    transition: all .5s;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .8);
 }

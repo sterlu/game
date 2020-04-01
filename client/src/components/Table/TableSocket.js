@@ -34,7 +34,6 @@ class Table extends Component {
         numberOfDice: 1,
         values: [val],
         noSound: true,
-        delay: 5000,
         callback: () => {}
       });
     };
@@ -47,7 +46,6 @@ class Table extends Component {
             rolling: true,
           }
         });
-        // this.diceRoll();
     };
 
     componentDidMount(){
@@ -103,7 +101,7 @@ class Table extends Component {
               </ul>
 
               <div>
-                <Button onClick={this.onClick} disabled={!isPlayersTurn || gameState.rolling}>Roll 🎲</Button>
+                <Button onClick={this.onClick} disabled={!isPlayersTurn || gameState.rolling || gameState.state !== 1}>Roll 🎲</Button>
                 <div id='dice' />
               </div>
 

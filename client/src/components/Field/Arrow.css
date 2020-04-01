@@ -22,7 +22,7 @@
     left: 75px;
 }
 .arrow.positive * {
-    background-color: #1e7e34;
+    background-color: #27ae60;
 }
 .arrow.positive .wide {
     top: 10px;
@@ -33,16 +33,16 @@
     left: 25px;
 }
 .arrow.negative * {
-    background-color: #FF0000;
+    background-color: #e74c3c;
 }
 .arrow.negative .wide {
     /*top: 10px;*/
 }
-.arrow.negative .end::after {
-    content: '';
-    position: absolute;
-    display: block;
-    height: 3px;
-    width: 3px;
-    background-color: red;
-}
+/*.arrow.negative .end::after {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    display: block;*/
+/*    height: 3px;*/
+/*    width: 3px;*/
+/*    background-color: #e74c3c;*/
+/*}*/

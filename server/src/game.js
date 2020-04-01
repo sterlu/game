@@ -1,4 +1,4 @@
-const COLORS = ['#e74c3c', '#3498db', '#f1c40f', '#27ae60', '#e67e22', '#8e44ad', '#16a085', '#34495e'];
+const COLORS = ['#e74c3c', '#3498db', '#f1d315', '#27ae60', '#e67e22', '#8e44ad', '#16a085', '#34495e'];
 const DEBUG = true;
 
 const log = t => DEBUG && console.log(t);
@@ -97,6 +97,7 @@ class Game {
     if (this.players.length >= 2) {
       this.state = GameState.ONGOING;
       log('Game started');
+      this.sendState();
     }
   }
 
@@ -126,7 +127,7 @@ class Game {
     }
     if (toField.goesTo && toField.goesTo !== from) {
       log(`Special field ${to} goes to ${toField.goesTo}`);
-      await sleep(500);
+      await sleep(600);
       console.log(stateChanges);
       stateChanges.push(...(await this.movePlayer(playerId, to, toField.goesTo)));
     }
@@ -144,9 +145,18 @@ class Game {
       const rolled = Math.ceil(Math.random() * 6);
       log(`New turn: ${player.name} rolled ${rolled}`);
       this.sendRoll(player, rolled);
+      await sleep(700);
       await this.movePlayer(player.id, player.fieldIndex, player.fieldIndex + rolled);
     }
-    this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length; // TODO skip players that have finished
+    const numOfPlayersFinished = this.players.filter(p => p.finished).length;
+    if (numOfPlayersFinished !== this.players.length) {
+      this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
+      while (this.players[this.turnOfPlayer].finished) {
+        this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
+      }
+    } else {
+      this.state = GameState.FINISHED;
+    }
     this.rolling = false;
     this.sendState();
     log('---\n');
