@@ -7,9 +7,6 @@ const io = require('socket.io');
 
 const createGame = require('./src/game');
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-
 const app = express();
 
 app.use(logger('dev'));
@@ -17,9 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client/build/')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.get('*', (req, res) => res.redirect('/'));
 
 const port = 6600;
 const server = http.createServer(app);
