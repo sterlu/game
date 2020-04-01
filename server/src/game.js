@@ -72,10 +72,13 @@ class Game {
   removePlayer(id) {
     const index = this.players.findIndex(p => p.id === id);
     if (index < 0) return;
-    if (this.state === GameState.ONGOING && index > this.turnOfPlayer) this.turnOfPlayer -= 1;
-    // TODO Bug: remove from all Fields
-    log(`Removed player ${this.players[index].name}`);
+    if (this.state === GameState.ONGOING && index < this.turnOfPlayer) this.turnOfPlayer -= 1;
+    if (this.state === GameState.ONGOING && index === this.players.length - 1) this.turnOfPlayer = 0;
+    const player = this.players[index];
+    log(`Removed player ${player.name}`);
+    this.fields[player.fieldIndex].players.splice(this.fields[player.fieldIndex].players.indexOf(player.id), 1);
     this.players.splice(index, 1);
+    if (this.players.length === 0) this.state = GameState.PREGAME;
     this.sendState();
   }
 
