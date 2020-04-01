@@ -122,6 +122,7 @@ class Game {
     if (to === this.fields.length - 1) player.finished = true;
     this.sendState();
     if (toField.players.length > 1 && to !== 0 && to !== 50) {
+      await sleep(500);
       log(`Player ${this.players.find(p => p.id === toField.players[0]).name} already on ${to}`);
       stateChanges.push(...(await this.movePlayer(toField.players[0], to, to - 3)));
     }
