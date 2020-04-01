@@ -40,6 +40,11 @@
     opacity: 1;
 }
 
+.banana {
+    background-image: url('../../banana.svg');
+}
+
+
 /*.field .player {*/
 /*    width: 30px;*/
 /*    height: 30px;*/

@@ -19,9 +19,11 @@ const Field = ({field: { index, goesTo, sleep }, players = []}) => {
         };
       }
     }
+
+
     console.log(fromPos, toPos);
     return (
-        <div className='field' id={`field-${index}`}>
+        <div className={`field ${sleep > 0 ? 'banana' : ''}`} id={`field-${index}`}>
             <i>{index}</i>
             {
               (index === 0 || index === 49) && (
