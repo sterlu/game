@@ -33,7 +33,7 @@ export const FIELDS = [
   { index: 31, goesTo: 0, sleep: 0, },
   { index: 32, goesTo: 0, sleep: 0, },
   { index: 33, goesTo: 0, sleep: 0, },
-  { index: 34, goesTo: 28, sleep: 0, },
+  { index: 34, goesTo: 29, sleep: 0, },
   { index: 35, goesTo: 37, sleep: 0, },
   { index: 36, goesTo: 0, sleep: 0, },
   { index: 37, goesTo: 0, sleep: 0, },
