@@ -24,7 +24,7 @@ const Field = ({field: { index, goesTo, sleep }, players = []}) => {
         <div className={`field ${sleep > 0 ? 'banana' : ''}`} id={`field-${index}`}>
             <i>{index}</i>
             {
-              (index === 0 || index === 49) && (
+              (index === 0 || index === 50) && (
                 <div className="players">
                     {
                         players.map(p => (
