@@ -25,7 +25,7 @@ class Table extends Component {
         this.props.socket.emit('game turn');
         this.setState({
           gameState: {
-            ...this.gameState,
+            ...this.state.gameState,
             rolling: true,
           }
         })
@@ -36,7 +36,7 @@ class Table extends Component {
 
         this.props.socket.on('state', (gameState) => {
             console.log(gameState);
-            const playerLocations = [];
+            const playerLocations = {};
             gameState.players.forEach(p => {
                 playerLocations[p.fieldIndex]
                   ? playerLocations[p.fieldIndex].push(p)
@@ -52,10 +52,11 @@ class Table extends Component {
         });
     }
     render(){
-        const { gameState, playerLocations, rolls } = this.state;
         const { socket } = this.props;
+        if (!socket.name) return (<Redirect to="/" />);
+        const { gameState, playerLocations, rolls } = this.state;
         let isPlayersTurn = false;
-        if (gameState.players && gameState.players[gameState.turnOfPlayer].id === socket.id) isPlayersTurn = true;
+        if (gameState.players && gameState.players.length && gameState.players[gameState.turnOfPlayer].id === socket.id) isPlayersTurn = true;
         if (gameState.players) {
           gameState.players.forEach((p, i) => {
             const field = document.getElementById(`field-${p.fieldIndex}`);
@@ -66,16 +67,22 @@ class Table extends Component {
           })
         }
 
-        if (!socket.name) return (<Redirect to="/" />);
         return (
             <div className="table">
                 <div>
                     <Button onClick={this.onClick} disabled={!isPlayersTurn || gameState.rolling}>Roll the dice</Button>
-                    {
-                        rolls.length > 0 && (
-                          <p>Last roll by {rolls[rolls.length - 1].player.name}: {rolls[rolls.length - 1].rolled}</p>
-                        )
-                    }
+                    <div className="stats">
+                      {
+                          gameState.turnOfPlayer >= 0 && (
+                            <div>Now playing: {gameState.players[gameState.turnOfPlayer].name}  </div>
+                          )
+                      }
+                      {
+                          rolls.length > 0 && (
+                            <div>Last roll by {rolls[rolls.length - 1].player.name}: {rolls[rolls.length - 1].rolled}</div>
+                          )
+                      }
+                    </div>
                 </div>
                 <div className="fields">
                     {
