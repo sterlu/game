@@ -24,6 +24,14 @@ class Table extends Component {
         }
     }
 
+    diceRoll = () => {
+        const element = document.getElementById('dice');
+        const response = (val) => {console.log(val);}
+        rollADie({element, numberOfDice: 1 , values: [ this.state.rolls[this.state.rolls.length - 1].rolled ],
+             noSound: true, delay : 5000, callback: response});
+
+    }
+
     onClick = () => {
         this.props.socket.emit('game turn');
         this.setState({
@@ -32,13 +40,7 @@ class Table extends Component {
             rolling: true,
           }
         });
-
-        // dice animation, kapiram da treba u setTimeout
-        const element = document.getElementById('dice');
-        const response = (val) => {console.log(val);}
-        rollADie({element, numberOfDice: 1 , values: [ this.state.rolls[this.state.rolls.length - 1].rolled ],
-             noSound: true, delay : 5000, callback: response});
-        
+        // this.diceRoll();
     };
 
     componentDidMount(){
@@ -75,6 +77,9 @@ class Table extends Component {
                 left: field.offsetLeft,
             }
           })
+        }
+        if(Array.isArray(rolls) && rolls.length) {
+            this.diceRoll();
         }
 
         return (
