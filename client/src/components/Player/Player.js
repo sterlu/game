@@ -3,7 +3,10 @@ import "./Player.css";
 
 const Player = ({ player: { id, name, color, position, fieldIndex }, inField = false}) => {
     return (
-      <div className="player" style={{
+      <div
+        className="player"
+        title={name}
+        style={{
         backgroundColor: color,
         position: inField ? 'static' : 'absolute',
         left: position.left + 35,
