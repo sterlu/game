@@ -6,11 +6,18 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import Routes from './Routes';
 import 'bootstrap/dist/css/bootstrap.css';
+import SocketContext from './Socket-context';
+import openSocket from "socket.io-client";
+
+
+const socket = openSocket("http://localhost:6600");
 
 ReactDOM.render(
+  <SocketContext.Provider value={socket}>
     <Router>
       <Routes />
-    </Router>,
+    </Router>
+  </SocketContext.Provider>,
   document.getElementById('root')
 );
 
