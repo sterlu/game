@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, '../client/build/')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-const port = 3000;
+const port = 6600;
 const server = http.createServer(app);
 server.listen(port, () => console.log(`App listening on port ${port}`));
 
