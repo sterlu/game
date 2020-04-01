@@ -121,7 +121,7 @@ class Game {
     player.sleep = toField.sleep;
     if (to === this.fields.length - 1) player.finished = true;
     this.sendState();
-    if (toField.players.length > 1 && to !== 0) {
+    if (toField.players.length > 1 && to !== 0 && to !== 50) {
       log(`Player ${this.players.find(p => p.id === toField.players[0]).name} already on ${to}`);
       stateChanges.push(...(await this.movePlayer(toField.players[0], to, to - 3)));
     }
@@ -150,9 +150,11 @@ class Game {
     }
     const numOfPlayersFinished = this.players.filter(p => p.finished).length;
     if (numOfPlayersFinished !== this.players.length) {
-      this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
-      while (this.players[this.turnOfPlayer].finished) {
+      if (rolled !== 6) {
         this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
+        while (this.players[this.turnOfPlayer].finished) {
+          this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
+        }
       }
     } else {
       this.state = GameState.FINISHED;
