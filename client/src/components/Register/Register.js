@@ -13,10 +13,12 @@ const Register = props => (
         <label> Unesite ime: </label>
         <input type='text' id='imeIgraca'/>
         <Button variant="btn btn-primary" onClick={() => {
-            props.socket.emit('register', document.getElementById('imeIgraca').value);
-            history.push('/table')
-            }
-            }> Unesi </Button>
+          const name = document.getElementById('imeIgraca').value;
+          if (!name) return;
+          props.socket.emit('register', name);
+          props.socket.name = name; // not great not terrible
+          history.push('/table')
+        }}> Unesi </Button>
     </div>
 )
 
@@ -25,7 +27,7 @@ const RegisterSocket = props => (
     <SocketContext.Consumer>
         {socket => <Register {...props} socket={socket} />}
     </SocketContext.Consumer>
-  
+
 )
 
 export default RegisterSocket;

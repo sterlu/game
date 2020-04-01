@@ -1,5 +1,35 @@
 .field {
-    width: 330px;
+    position: relative;
+    width: 150px;
+    height: 150px;
     border: 1px;
     border-style: solid;
+    border-radius: 50%;
+    margin: 5px;
+}
+
+.field .players {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.field i {
+    position: absolute;
+    display: block;
+    top: 2px;
+    right: 2px;
+}
+
+.field .player {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    color: white;
+    background-color: #333;
+    font-weight: bold;
+    margin: 5px;
 }

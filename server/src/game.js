@@ -1,15 +1,22 @@
+const COLORS = ['#e74c3c', '#3498db', '#f1c40f', '#27ae60', '#e67e22', '#8e44ad', '#16a085', '#34495e'];
+const DEBUG = true;
+
+const log = t => DEBUG && console.log(t);
+
 class Player {
   /**
    * @param {string} id
    * @param {string} name
    * @param {Object} socket
    * @param {Field.index} fieldIndex
+   * @param {color} name
    */
-  constructor(id, name, socket, fieldIndex) {
+  constructor(id, name, socket, fieldIndex, color) {
     this.id = id;
     this.name = name;
     this.socket = socket;
     this.fieldIndex = fieldIndex;
+    this.color = color;
     this.sleep = 0;
     this.finished = false;
   }
@@ -49,6 +56,7 @@ class Game {
     /** @type {number} */
     this.turnOfPlayer = 0;
     this.state = GameState.PREGAME;
+    this.nextColorIndex = 0;
   }
 
   /**
@@ -58,8 +66,9 @@ class Game {
    * @returns {number}
    */
   addPlayer(id, name, socket) {
-    const player = new Player(id, name, socket, 0);
+    const player = new Player(id, name, socket, 0, COLORS[this.nextColorIndex]);
     this.players.push(player);
+    this.nextColorIndex = (this.nextColorIndex + 1) % COLORS.length;
     this.fields[0].players.push(player.id);
     log(`Added player ${name}`);
     this.sendState();
@@ -132,6 +141,7 @@ class Game {
       this.movePlayer(player.id, player.fieldIndex, player.fieldIndex + rolled);
     }
     this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length; // TODO skip players that have finished
+    this.sendState();
     log('---\n');
     return this.players.filter(p => p.finished).length;
   }
@@ -145,7 +155,13 @@ class Game {
     const state = {
       state: this.state,
       turnOfPlayer: this.turnOfPlayer,
-      players: this.players.map(p => ({ name: p.name, id: p.id, sleep: p.sleep, fieldIndex: p.fieldIndex })),
+      players: this.players.map(p => ({
+        name: p.name,
+        id: p.id,
+        sleep: p.sleep,
+        fieldIndex: p.fieldIndex,
+        color: p.color,
+      })),
     };
     this.players.forEach((p) => {
       if (p.socket) p.socket.emit('state', state);
@@ -162,9 +178,6 @@ class Game {
     });
   }
 }
-
-const DEBUG = true;
-const log = t => DEBUG && console.log(t);
 
 /**
  * @returns {Game}
