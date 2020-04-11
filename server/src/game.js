@@ -155,7 +155,7 @@ class Game {
       log(`New turn: ${player.name} sleeping (${player.sleep} more turns)`);
       this.sendRoll(player, 0);
     } else {
-      rolled = Math.ceil(Math.random() * 6);
+      rolled = 1 + Math.floor(Math.random() * 6);
       log(`New turn: ${player.name} rolled ${rolled}`);
       this.sendRoll(player, rolled);
       await sleep(700);
@@ -170,10 +170,18 @@ class Game {
     }
     const numOfPlayersFinished = this.players.filter(p => p.finished).length;
     if (numOfPlayersFinished !== this.players.length) {
-      if (rolled !== 6 || this.sixCounter === 0) {
-        this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
-        while (this.players[this.turnOfPlayer].finished) {
+      if (rolled !== 6 || this.players[this.turnOfPlayer].sleep || this.sixCounter === 0 || this.players[this.turnOfPlayer].finished) {
+        while (true) {
           this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
+          const skipBecauseFinished = this.players[this.turnOfPlayer].finished;
+          let skipBecauseSleep = false;
+          if (this.players[this.turnOfPlayer].sleep) {
+            skipBecauseSleep = true;
+            this.players[this.turnOfPlayer].sleep -= 1;
+          }
+          if (!skipBecauseFinished && !skipBecauseSleep) {
+            break;
+          }
         }
       }
     } else {
