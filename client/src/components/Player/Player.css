@@ -1,14 +1,31 @@
 .player {
-    width: 4rem;
-    height: 4rem;
-    margin: .5rem;
-    line-height: 4rem;
+    width: 5rem;
+    height: 5rem;
     text-align: center;
     border-radius: 50%;
-    color: white;
-    background-color: #333;
+    color: transparent;
     font-weight: bold;
     z-index: 1;
     transition: all .5s;
-    box-shadow: 0 0 4px rgba(0, 0, 0, .8);
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.player:after {
+    content: attr(data-name);
+    position: absolute;
+    display: block;
+    bottom: 1.5rem;
+    color: white;
+    width: 5rem;
+    height: 2rem;
+    line-height: 2rem;
+    background: rgba(0, 0, 0, .5);
+    opacity: 0;
+    transition: all .2s;
+}
+
+.player:hover:after {
+    opacity: 1;
 }

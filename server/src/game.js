@@ -1,4 +1,5 @@
 const COLORS = ['#e74c3c', '#3498db', '#f1d315', '#27ae60', '#e67e22', '#8e44ad', '#16a085', '#34495e'];
+const SKINS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 const DEBUG = true;
 
 const log = t => DEBUG && console.log(t);
@@ -10,14 +11,14 @@ class Player {
    * @param {string} name
    * @param {Object} socket
    * @param {Field.index} fieldIndex
-   * @param {color} name
+   * @param {number} skinIndex
    */
-  constructor(id, name, socket, fieldIndex, color) {
+  constructor(id, name, socket, fieldIndex, skinIndex) {
     this.id = id;
     this.name = name;
     this.socket = socket;
     this.fieldIndex = fieldIndex;
-    this.color = color;
+    this.skinIndex = skinIndex;
     this.sleep = 0;
     this.finished = false;
   }
@@ -63,7 +64,6 @@ class Game {
     /** @type {number} */
     this.turnOfPlayer = 0;
     this.state = GameState.PREGAME;
-    this.nextColorIndex = 0;
     this.rolling = false;
     this.sixCounter = 0;
   }
@@ -75,9 +75,13 @@ class Game {
    * @returns {number}
    */
   addPlayer(id, name, socket) {
-    const player = new Player(id, name, socket, 0, COLORS[this.nextColorIndex]);
+    const unusedSkins = SKINS.filter(s => this.players.findIndex(p => p.skinIndex === s) === -1);
+    console.log(unusedSkins);
+    const skin = unusedSkins[Math.floor(Math.random() * unusedSkins.length)];
+    console.log(skin);
+    const player = new Player(id, name, socket, 0, skin);
     this.players.push(player);
-    this.nextColorIndex = (this.nextColorIndex + 1) % COLORS.length;
+
     this.fields[0].players.push(player.id);
     log(`Added player ${name}`);
     this.sendState();
@@ -151,8 +155,7 @@ class Game {
       log(`New turn: ${player.name} sleeping (${player.sleep} more turns)`);
       this.sendRoll(player, 0);
     } else {
-      // rolled = Math.ceil(Math.random() * 6);
-      rolled = 6;
+      rolled = Math.ceil(Math.random() * 6);
       log(`New turn: ${player.name} rolled ${rolled}`);
       this.sendRoll(player, rolled);
       await sleep(700);
@@ -197,7 +200,7 @@ class Game {
         id: p.id,
         sleep: p.sleep,
         fieldIndex: p.fieldIndex,
-        color: p.color,
+        skinIndex: p.skinIndex,
       })),
     };
     this.players.forEach((p) => {
