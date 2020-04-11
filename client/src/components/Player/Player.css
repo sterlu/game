@@ -1,13 +1,13 @@
 .player {
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
+    width: 4rem;
+    height: 4rem;
+    margin: .5rem;
+    line-height: 4rem;
     text-align: center;
     border-radius: 50%;
     color: white;
     background-color: #333;
     font-weight: bold;
-    margin: 2px;
     z-index: 1;
     transition: all .5s;
     box-shadow: 0 0 4px rgba(0, 0, 0, .8);

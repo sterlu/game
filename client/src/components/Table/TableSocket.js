@@ -77,9 +77,10 @@ class Table extends Component {
         if (gameState.players) {
           gameState.players.forEach((p, i) => {
             const field = document.getElementById(`field-${p.fieldIndex}`);
+            const remScale = field.offsetHeight / 5;
             p.position = {
-                top: field.offsetTop,
-                left: field.offsetLeft,
+                top: field.offsetTop / remScale,
+                left: field.offsetLeft / remScale,
             }
           })
         }

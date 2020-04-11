@@ -1,55 +1,76 @@
+class Field {
+    /**
+     * @param {number} index
+     * @param {number} x
+     * @param {number} y
+     * @param {number} sleep
+     * @param {number} goesTo
+     * @param {boolean} goesBothWays
+     */
+    constructor(index, x, y, sleep, goesTo = 0, goesBothWays = false) {
+        this.index = index;
+        this.x = x;
+        this.y = y;
+        this.goesTo = goesTo;
+        this.sleep = sleep;
+        this.goesBothWays = goesBothWays;
+        /** @type {Player.id[]} */
+        this.players = [];
+    }
+}
+
 export const FIELDS = [
-  { index: 0, goesTo: 0, sleep: 0, },
-  { index: 1, goesTo: 0, sleep: 0, },
-  { index: 2, goesTo: 0, sleep: 0, },
-  { index: 3, goesTo: 0, sleep: 0, },
-  { index: 4, goesTo: 0, sleep: 0, },
-  { index: 5, goesTo: 7, sleep: 0, },
-  { index: 6, goesTo: 13, sleep: 0, },
-  { index: 7, goesTo: 0, sleep: 0, },
-  { index: 8, goesTo: 10, sleep: 0, },
-  { index: 9, goesTo: 0, sleep: 0, },
-  { index: 10, goesTo: 0, sleep: 0, },
-  { index: 11, goesTo: 9, sleep: 0, },
-  { index: 12, goesTo: 0, sleep: 0, },
-  { index: 13, goesTo: 0, sleep: 0, },
-  { index: 14, goesTo: 7, sleep: 0, },
-  { index: 15, goesTo: 0, sleep: 0, },
-  { index: 16, goesTo: 23, sleep: 0, },
-  { index: 17, goesTo: 0, sleep: 0, },
-  { index: 18, goesTo: 0, sleep: 0, },
-  { index: 19, goesTo: 0, sleep: 0, },
-  { index: 20, goesTo: 0, sleep: 0, },
-  { index: 21, goesTo: 0, sleep: 0, },
-  { index: 22, goesTo: 18, sleep: 0, },
-  { index: 23, goesTo: 0, sleep: 0, },
-  { index: 24, goesTo: 0, sleep: 2, },
-  { index: 25, goesTo: 23, sleep: 0, },
-  { index: 26, goesTo: 27, sleep: 0, },
-  { index: 27, goesTo: 0, sleep: 0, },
-  { index: 28, goesTo: 0, sleep: 0, },
-  { index: 29, goesTo: 34, sleep: 0, },
-  { index: 30, goesTo: 0, sleep: 0, },
-  { index: 31, goesTo: 0, sleep: 0, },
-  { index: 32, goesTo: 0, sleep: 0, },
-  { index: 33, goesTo: 0, sleep: 0, },
-  { index: 34, goesTo: 29, sleep: 0, },
-  { index: 35, goesTo: 37, sleep: 0, },
-  { index: 36, goesTo: 0, sleep: 0, },
-  { index: 37, goesTo: 0, sleep: 0, },
-  { index: 38, goesTo: 0, sleep: 0, },
-  { index: 39, goesTo: 36, sleep: 0, },
-  { index: 40, goesTo: 0, sleep: 0, },
-  { index: 41, goesTo: 0, sleep: 0, },
-  { index: 42, goesTo: 0, sleep: 1, },
-  { index: 43, goesTo: 0, sleep: 0, },
-  { index: 44, goesTo: 41, sleep: 0, },
-  { index: 45, goesTo: 0, sleep: 0, },
-  { index: 46, goesTo: 33, sleep: 0, },
-  { index: 47, goesTo: 0, sleep: 0, },
-  { index: 48, goesTo: 45, sleep: 0, },
-  { index: 49, goesTo: 47, sleep: 0, },
-  { index: 50, goesTo: 0, sleep: 0, },
+    new Field(0, 56, 98, 0),
+    new Field(1, 94, 132, 0),
+    new Field(2, 104, 190, 0),
+    new Field(3, 107, 252, 0),
+    new Field(4, 101, 313, 0),
+    new Field(5, 76, 374, 0, 7),
+    new Field(6, 57, 434, 0, 13),
+    new Field(7, 65, 495, 0),
+    new Field(8, 113, 536, 0, 10),
+    new Field(9, 174, 545, 0),
+    new Field(10, 234, 524, 0),
+    new Field(11, 261, 465, 0, 9),
+    new Field(12, 276, 406, 0),
+    new Field(13, 256, 347, 0),
+    new Field(14, 224, 294, 0, 7),
+    new Field(15, 206, 235, 0),
+    new Field(16, 206, 175, 0, 23),
+    new Field(17, 226, 121, 0,),
+    new Field(18, 267, 80, 0),
+    new Field(19, 317, 52, 0),
+    new Field(20, 376, 52, 0),
+    new Field(21, 427, 80, 0),
+    new Field(22, 452, 132, 0, 18),
+    new Field(23, 431, 187, 0),
+    new Field(24, 398, 236, 2),
+    new Field(25, 371, 290, 0, 23),
+    new Field(26, 355, 346, 0, 27),
+    new Field(27, 351, 404, 0),
+    new Field(28, 367, 462, 0),
+    new Field(29, 396, 513, 0, 34, true),
+    new Field(30, 453, 540, 0),
+    new Field(31, 517, 534, 0),
+    new Field(32, 572, 499, 0),
+    new Field(33, 603, 445, 0),
+    new Field(34, 603, 380, 0, 29, true),
+    new Field(35, 578, 322, 0, 37),
+    new Field(36, 560, 261, 0),
+    new Field(37, 542, 200, 0),
+    new Field(38, 542, 139, 0),
+    new Field(39, 567, 82, 0, 36),
+    new Field(40, 623, 55, 0),
+    new Field(41, 685, 56, 0),
+    new Field(42, 736, 98, 1),
+    new Field(43, 757, 160, 0),
+    new Field(44, 753, 225, 0, 41),
+    new Field(45, 738, 284, 0),
+    new Field(46, 707, 341, 0, 33),
+    new Field(47, 686, 399, 0),
+    new Field(48, 685, 461, 0, 45),
+    new Field(49, 704, 519, 0, 47),
+    new Field(50, 700, 580, 0),
 ];
 
 export const FIELDS_CHUNKED = [];
