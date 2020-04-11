@@ -7,10 +7,7 @@ import Routes from './Routes';
 import SocketContext from './Socket-context';
 import openSocket from "socket.io-client";
 
-
-const socket = openSocket(`${document.location.hostname}:6600`);
-// const socket = openSocket('http://localhost:6600/');
-
+const socket = openSocket(document.location.hostname);
 
 ReactDOM.render(
   <SocketContext.Provider value={socket}>

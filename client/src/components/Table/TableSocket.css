@@ -43,6 +43,7 @@
     height: 4rem;
     width: 4rem;
     margin-right: 1rem;
+    background-size: 4rem;
     background-position: center;
     background-repeat: no-repeat;
 }
@@ -93,6 +94,6 @@
 
 
 #dice {
-    margin: 100px;
-    height: 38px;
+    margin: 10rem;
+    height: 3.8rem;
 }

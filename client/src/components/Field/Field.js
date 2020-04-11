@@ -19,7 +19,7 @@ const Field = ({field: { index, goesTo, sleep, x, y }, players = [], highlighted
                 <div className="players">
                     {
                         players.map(p => (
-                          <Player key={p.index} player={p} inField />
+                          <Player key={p.id} player={p} inField />
                         ))
                     }
                 </div>

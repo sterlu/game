@@ -22,12 +22,13 @@ const Player = ({ player: { id, name, skinIndex, position, fieldIndex }, inField
         title={name}
         data-name={name}
         style={{
-        backgroundImage: `url("${skins[skinIndex-1]}")`,
-        position: inField ? 'static' : 'absolute',
-        left: `${position.left}rem`,
-        top: `${position.top}rem`,
-        visibility: (!inField && (fieldIndex === 0 || fieldIndex === 50)) ? 'hidden' : 'visible'
-      }}>
+            backgroundImage: `url("${skins[skinIndex - 1]}")`,
+            position: inField ? 'static' : 'absolute',
+            left: `${position.left}rem`,
+            top: `${position.top}rem`,
+            visibility: (!inField && (fieldIndex === 0 || fieldIndex === 50)) ? 'hidden' : 'visible'
+        }}
+      >
         {name.substr(0, 1)}
       </div>
     )
