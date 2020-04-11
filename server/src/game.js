@@ -65,6 +65,7 @@ class Game {
     this.state = GameState.PREGAME;
     this.nextColorIndex = 0;
     this.rolling = false;
+    this.sixCounter = 0;
   }
 
   /**
@@ -132,7 +133,7 @@ class Game {
       log(`Player ${this.players.find(p => p.id === toField.players[0]).name} already on ${to}`);
       stateChanges.push(...(await this.movePlayer(toField.players[0], to, to - 3)));
     }
-    if (toField.goesTo && toField.goesTo !== from) {
+    if (toField.goesTo && !(toField.goesBothWays && fromField.goesBothWays)) {
       log(`Special field ${to} goes to ${toField.goesTo}`);
       await sleep(600);
       console.log(stateChanges);
@@ -144,22 +145,33 @@ class Game {
   async turn() {
     const player = this.players[this.turnOfPlayer];
     this.rolling = true;
+    let rolled = 0;
     if (player.sleep) {
       player.sleep -= 1;
       log(`New turn: ${player.name} sleeping (${player.sleep} more turns)`);
       this.sendRoll(player, 0);
     } else {
-      const rolled = Math.ceil(Math.random() * 6);
+      // rolled = Math.ceil(Math.random() * 6);
+      rolled = 6;
       log(`New turn: ${player.name} rolled ${rolled}`);
       this.sendRoll(player, rolled);
       await sleep(700);
-      await this.movePlayer(player.id, player.fieldIndex, player.fieldIndex + rolled);
+      if (rolled === 6) this.sixCounter += 1;
+      else this.sixCounter = 0;
+      if (this.sixCounter === 3) {
+        await this.movePlayer(player.id, player.fieldIndex, 0);
+        this.sixCounter = 0;
+      } else {
+        await this.movePlayer(player.id, player.fieldIndex, player.fieldIndex + rolled);
+      }
     }
     const numOfPlayersFinished = this.players.filter(p => p.finished).length;
     if (numOfPlayersFinished !== this.players.length) {
-      this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
-      while (this.players[this.turnOfPlayer].finished) {
+      if (rolled !== 6 || this.sixCounter === 0) {
         this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
+        while (this.players[this.turnOfPlayer].finished) {
+          this.turnOfPlayer = (this.turnOfPlayer + 1) % this.players.length;
+        }
       }
     } else {
       this.state = GameState.FINISHED;
