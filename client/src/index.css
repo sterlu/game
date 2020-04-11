@@ -1,24 +1,24 @@
 html { font-size: 10px; }
-@media (min-width: 1300px) and (min-height: 780px) {
+@media (min-width: 1400px) and (min-height: 780px) {
     html { font-size: 13px; }
 }
-@media (min-width: 1500px) and (min-height: 900px) {
+@media (min-width: 1600px) and (min-height: 900px) {
     html { font-size: 15px; }
 }
 
-
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-    background-color: #1E2E06 !important;
-    color: white !important;
+@font-face {
+    font-family: 'Shopie';
+    src: url('fonts/Shopie.eot');
+    src: url('fonts/Shopie.eot?#iefix') format('embedded-opentype'),
+    url('fonts/Shopie.woff2') format('woff2'),
+    url('fonts/Shopie.woff') format('woff'),
+    url('fonts/Shopie.ttf')  format('truetype'),
+    url('fonts/Shopie.svg#Shopie') format('svg');
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+    margin: 0;
+    font-family: 'Shopie', sans-serif;
+    background-color: #1E2E06 !important;
+    color: white !important;
 }

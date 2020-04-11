@@ -3,10 +3,10 @@ import "./Field.css";
 import Player from '../Player';
 import { ArrowNegative, ArrowPositive } from './Arrow';
 
-const Field = ({field: { index, goesTo, sleep, x, y }, players = []}) => {
+const Field = ({field: { index, goesTo, sleep, x, y }, players = [], highlighted = false}) => {
     return (
         <div
-            className={`field ${sleep > 0 ? 'banana' : ''}`}
+            className={`field ${sleep > 0 ? 'sleep' : ''} ${highlighted ? 'highlighted' : ''} ${(index === 0 || index === 50) ? 'special' : ''}`}
             id={`field-${index}`}
             style={{
                 left: `${x/10 - 2.5}rem`,

@@ -18,12 +18,15 @@
     display: block;
     bottom: 1.5rem;
     color: white;
-    width: 5rem;
+    min-width: 5rem;
     height: 2rem;
     line-height: 2rem;
     background: rgba(0, 0, 0, .5);
     opacity: 0;
     transition: all .2s;
+    white-space: pre;
+    font-size: 1.6rem;
+    border-radius: 1rem;
 }
 
 .player:hover:after {

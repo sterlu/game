@@ -188,6 +188,7 @@ class Game {
       this.state = GameState.FINISHED;
     }
     this.rolling = false;
+    await sleep(700);
     this.sendState();
     log('---\n');
     return this.players.filter(p => p.finished).length;

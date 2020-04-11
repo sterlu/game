@@ -13,11 +13,9 @@ import skin10 from './skins/Player 10.svg';
 import skin11 from './skins/Player 11.svg';
 import skin12 from './skins/Player 12.svg';
 import skin13 from './skins/Player 13.svg';
-
 const skins = [skin1, skin2, skin3, skin4, skin5, skin6, skin7, skin8, skin9, skin10, skin11, skin12, skin13,];
 
 const Player = ({ player: { id, name, skinIndex, position, fieldIndex }, inField = false}) => {
-    console.log(skinIndex, skins[skinIndex]);
     return (
       <div
         className="player"

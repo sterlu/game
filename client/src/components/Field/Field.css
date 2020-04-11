@@ -9,15 +9,15 @@
 .field .players {
     height: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    align-content: center;
+    align-content: flex-end;
     flex-wrap: wrap;
 }
 
 .field i {
-    position: absolute;
     display: block;
+    position: absolute;
     top: 0;
     right: 0;
     background-color: white;
@@ -28,4 +28,25 @@
     font-size: .9rem;
     text-align: center;
     box-shadow: 0 0 1px;
+    display: none;
+}
+
+.field.highlighted {
+    background-color: rgba(255, 255, 255, .5);
+}
+.field.special {
+    width: 12rem;
+    height: 3rem;
+    border-radius: .5rem;
+    /*background-color: transparent;*/
+}
+.field.special .player {
+    height: 3rem;
+    width: 3rem;
+    background-size: 3rem;
+}
+.field.special .player:after {
+    bottom: .5rem;
+    min-width: 3rem;
+    font-size: 1.2rem;
 }

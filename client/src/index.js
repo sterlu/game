@@ -4,7 +4,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Routes from './Routes';
-import 'bootstrap/dist/css/bootstrap.css';
 import SocketContext from './Socket-context';
 import openSocket from "socket.io-client";
 
