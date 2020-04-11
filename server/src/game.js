@@ -130,7 +130,11 @@ class Game {
     toField.players.push(playerId);
     player.fieldIndex = to;
     player.sleep = toField.sleep;
-    if (to === this.fields.length - 1) player.finished = true;
+
+    if (to === this.fields.length - 1){
+      player.finished = true;
+      this.finishedGame(player);
+    } 
     this.sendState();
     if (toField.players.length > 1 && to !== 0 && to !== 50) {
       await sleep(500);
@@ -225,6 +229,24 @@ class Game {
     this.players.forEach((p) => {
       if (p.socket) p.socket.emit('rolled', message);
     });
+  }
+
+  finishedGame(player){
+
+    const index = this.players.findIndex(p => p.id === player.id);
+
+    const message = {
+      player: {id: player.id, name: player.name }
+    }
+
+    log(`${player.name} has finished. Congratulations`);
+    this.players[index].socket.emit('end', message);
+  }
+
+  kick(){
+    const player = this.players[this.turnOfPlayer];
+
+    this.removePlayer(player.id);
   }
 
   _logFields() {

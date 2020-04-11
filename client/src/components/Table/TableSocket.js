@@ -79,6 +79,11 @@ class Table extends Component {
                 rolls: [...this.state.rolls, msg],
             }, this.diceRoll);
         });
+        this.props.socket.on('end', (msg) =>{
+            // console.log(msg.player.name, msg.rolled);
+            alert(`Congratulations ${msg.player.name}`);
+        });
+
     }
     render(){
         const { socket } = this.props;

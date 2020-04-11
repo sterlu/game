@@ -36,4 +36,8 @@ socketServer.on('connection', function (socket) {
   socket.on('game turn', function (msg) {
     game.turn();
   });
+  socket.on('kick', function () {
+    game.kick();
+  });
+
 });
