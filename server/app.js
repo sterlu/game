@@ -17,14 +17,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../client/build/')));
-app.get('*', (req, res) => res.redirect('/'));
-
 app.use((req, res, next) => {
   (isProd && !req.secure)
     ? res.redirect('https://' + req.headers.host + req.url)
     : next();
 });
+app.use(express.static(path.join(__dirname, '../client/build/')));
+app.get('*', (req, res) => res.redirect('/'));
 
 const httpServer = http.createServer(app);
 httpServer.listen(80);
